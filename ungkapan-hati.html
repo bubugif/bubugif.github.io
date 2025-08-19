@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Ungkapan Hati</title>
+<style>
+:root {
+  --bg1: #111;
+  --bg2: #222;
+  --radius: .75rem;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color: #fff;
+  font-family: "Segoe UI",sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset);
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+
+.gif-container {
+  width: 100%;
+  height: 160px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: .5rem;
+  flex-shrink: 0;
+}
+.gif-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #fff;
+  display: block;
+  transition: opacity .4s ease;
+}
+
+.heart {
+  font-size: clamp(2rem,8vw,3rem);
+  animation: heartbeat 1.2s infinite;
+  will-change: transform;
+}
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+h1 {
+  font-size: clamp(1.3rem,4vw,2rem);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(255,255,255,0.3);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.content::-webkit-scrollbar { width: 6px; }
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+}
+
+.quote {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s ease, transform .35s ease;
+  will-change: opacity, transform;
+}
+.quote.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.signature {
+  margin-top: .5rem;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.signature.visible { opacity: 1; }
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card no-select" id="card">
+    <div class="gif-container">
+      <img id="gif">
+    </div>
+    <div class="heart">❤️</div>
+    <h1>Ada Pesan Manis Buat Kamu 💌</h1>
+
+    <div class="content" id="content">
+      <p id="main-message">Klik di mana saja untuk mulai baca 😉</p>
+      <div id="extra-wrapper"></div>
+      <div class="signature" id="signature">💘 Dari aku yang tulus</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const wrapper = document.querySelector(".wrapper");
+  const wrapperQuotes = document.getElementById("extra-wrapper");
+  const content = document.getElementById("content");
+  const signature = document.getElementById("signature");
+  const gif = document.getElementById("gif");
+
+  const paragraphs = [
+    "Aku selalu senyum tiap inget kamu 😊",
+    "Kamu itu unik, bikin aku nyaman banget.",
+    "Hari-hari aku jadi lebih indah gara-gara kamu ✨",
+    "Kadang aku takut kehilangan kamu...",
+    "Makanya aku mau jujur sekarang ❤️",
+    "Aku suka sama kamu, beneran serius!",
+    "Kalau kamu mau, aku janji jagain kamu sebaik mungkin.",
+    "Jawabannya aku harap sih 'iya' 😍",
+    "<b>Mau ga kamu jadi pacar aku?</b> 💘"
+  ];
+
+  const gifs = [
+    "https://bubugif.github.io/gif/bubu00.gif",
+    "https://bubugif.github.io/gif/bubu04.gif",
+    "https://bubugif.github.io/gif/bubu01.gif",
+    "https://bubugif.github.io/gif/bubu07.gif",
+    "https://bubugif.github.io/gif/bubu06.gif",
+    "https://bubugif.github.io/gif/bubu08.gif",
+    "https://bubugif.github.io/gif/bubu11.gif",
+    "https://bubugif.github.io/gif/bubu02.gif",
+    "https://bubugif.github.io/gif/bubu08.gif",
+    "https://bubugif.github.io/gif/bubu10.gif"
+  ];
+
+  let i = 0;
+  let isPlaying = false;
+  gif.src = gifs[i];
+
+  function showNext() {
+    if (isPlaying || i >= paragraphs.length) return;
+    isPlaying = true;
+
+    // update gif sesuai index
+    gif.style.opacity = 0;
+    setTimeout(() => {
+      gif.src = gifs[i];
+      gif.onload = () => { gif.style.opacity = 1; };
+    }, 200);
+
+    // tampilkan teks
+    const p = document.createElement("p");
+    p.className = "quote";
+    p.innerHTML = paragraphs[i++];
+    wrapperQuotes.appendChild(p);
+
+    requestAnimationFrame(() => p.classList.add("visible"));
+
+    // auto-scroll ke bawah
+    setTimeout(() => {
+      content.scrollTo({ top: content.scrollHeight, behavior: "smooth" });
+    }, 60);
+
+    // cooldown anti spam
+    setTimeout(() => {
+      isPlaying = false;
+      if (i >= paragraphs.length) {
+        signature.classList.add("visible");
+      }
+    }, 650);
+  }
+
+  wrapper.addEventListener("click", showNext);
+})();
+</script>
+</body>
+  </html>
