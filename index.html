@@ -3,42 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>bubugit.github.io</title>
+<title>bubugif.github.io</title>
+<!-- Meta penting -->
+<meta name="description" content="bubugif.github.io adalah web bucin yang di buat dengan html, css, js">
+<meta name="keywords" content="html,css,js,bubugif">
+<meta name="author" content="Bubugif">
+<!-- Favicon -->
+<link rel="icon" href="https://bubugif.github.io/bubugif.png" type="image/x-icon">
+<!-- Open Graph (biar bagus kalau dishare ke sosmed) -->
+<meta property="og:title" content="bubugit.github.io">
+<meta property="og:description" content="bubugif.github.io adalah web bucin yang di buat dengan html, css, js">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bubugif.github.io">
+<meta property="og:image" content="https://bubugif.github.io/bubugif.png">
 <style>
   body {
-    background-color: black;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #000000, #1c1c1c);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   h3 {
-    color: white;
     text-align: center;
-    background-color: gray;
-    border: double 4px black;
+    background: linear-gradient(90deg, #444, #777);
+    border: none;
+    padding: 15px;
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 3px black;
   }
   ol {
-    border: double 4px gray;
-    background-color: silver;
+    width: 85%;
+    margin: 40px auto;
     padding: 20px;
-    font-weight: bold;
+    list-style: none;
+    border-radius: 10px;
+    background: rgba(192,192,192,0.1);
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    flex: 1;
   }
   ol > li {
-    color: white;
-    background-color: gray;
-    border: double 4px black;
-    padding: 5px;
-    margin: 5px;
+    margin: 15px 0;
+    background: #333;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  ol > li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
   }
   li > a {
-    color: white;
+    display: block;
+    color: #fff;
     font-weight: bold;
     text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+  }
+  li > a:hover {
+    background: linear-gradient(90deg, #666, #999);
+    color: #000;
+  }
+  /* Footer */
+  footer {
+    text-align: center;
+    background: #111;
+    padding: 15px 10px;
+    font-size: 0.85rem;
+    color: #bbb;
+    border-top: 1px solid #333;
+  }
+  footer a {
+    color: #bbb;
+    margin: 0 8px;
+    text-decoration: none;
+  }
+  footer a:hover {
+    color: #fff;
+    text-decoration: underline;
   }
 </style>
 </head>
 <body>
   <h3>BUBUGIF.GITHUB.IO</h3>
-<ol>
-  <li><a href="https://bubugif.github.io/ungkapan-hati.html" target="_blank">Ungkapan Hati</a></li>
-  <li><a href="https://bubugif.github.io/cinta-yang-menyakitkan.html" target="_blank">Cinta yang Menyakitkan</a></li>
-</ol>
+  <ol>
+    <li><a href="https://bubugif.github.io/ungkapan-hati.html" target="_blank">Ungkapan Hati</a></li>
+    <li><a href="https://bubugif.github.io/cinta-yang-menyakitkan.html" target="_blank">Cinta yang Menyakitkan</a></li>
+  </ol>
+  
+  <footer>
+    <a href="https://bubugif.github.io/privacy-policy.html">Privacy Policy</a> | 
+    <a href="https://bubugif.github.io/disclaimer.html">Disclaimer</a> | 
+    <a href="https://bubugif.github.io/contact.html">Contact</a>
+  </footer>
 </body>
 </html>
