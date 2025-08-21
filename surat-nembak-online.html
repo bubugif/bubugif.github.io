@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Surat Nembak Online</title>
+<!-- Meta penting -->
+<meta name="description" content="By: bubugif.github.io">
+<meta name="keywords" content="html,css,js,bubugif">
+<meta name="author" content="Bubugif">
+<!-- Favicon -->
+<link rel="icon" href="https://bubugif.github.io/bubugif.png" type="image/x-icon">
+<!-- Open Graph (biar bagus kalau dishare ke sosmed) -->
+<meta property="og:title" content="Surat Nembak Online">
+<meta property="og:description" content="By: bubugif.github.io">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bubugif.github.io/surat-nembak-online.html">
+<meta property="og:image" content="https://bubugif.github.io/bubugif.png">
+<style>
+body {
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  background:#0f0f0f;
+  font-family:"Segoe UI",sans-serif;
+  color:#f5f5f5;
+  font-size:14px; /* lebih kecil */
+}
+.start {
+  display:flex;
+  flex-direction:column;
+  gap:.8rem;
+  text-align:center;
+  max-width:300px;
+}
+input {
+  padding:.4rem .8rem;
+  border:none;
+  border-radius:.4rem;
+  font-size:.9rem;
+  outline:none;
+  background:#1c1c1c;
+  color:#fff;
+}
+button {
+  padding:.4rem 1rem;
+  border:none;
+  border-radius:.4rem;
+  cursor:pointer;
+  font-size:.9rem;
+  background:#ff4da6;
+  color:#fff;
+  transition:.3s;
+}
+button:disabled {opacity:0.6;cursor:not-allowed;}
+button:hover:not(:disabled){transform:scale(1.05);}
+.envelope {
+  width:220px;
+  height:140px;
+  background:#ff4da6;
+  border-radius:.4rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:1rem;
+  font-weight:bold;
+  box-shadow:0 6px 18px rgba(0,0,0,.6);
+  cursor:pointer;
+  user-select:none;
+  transition:transform .6s ease;
+  margin-top:1rem;
+}
+.envelope.opened {transform:scale(0);pointer-events:none;}
+.card {
+  max-width:320px;
+  width:90%;
+  background:#1c1c1c;
+  border-radius:.8rem;
+  padding:1rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.7);
+  display:none;
+  flex-direction:column;
+  gap:.8rem;
+}
+.card h2 {color:#ff4da6;font-size:1.2rem;}
+.message {min-height:50px;font-size:1rem;line-height:1.4;}
+.choices {display:flex;gap:.6rem;justify-content:center;margin-top:.6rem;}
+.yes{background:#ff4da6;color:#fff;}
+.no{background:#444;color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- Step 1: Input Nama -->
+<div class="start" id="start">
+  <h2 style="font-size:1.1rem;">Masukin dulu namamu</h2>
+  <input type="text" id="nama" placeholder="Masukin namamu..." />
+  <button id="mulai">Mulai</button>
+</div>
+
+<!-- Step 2: Envelope -->
+<div class="envelope" id="envelope" style="display:none;">📩 Klik untuk buka</div>
+
+<!-- Step 3: Card -->
+<div class="card" id="card">
+  <h2>Surat 💌</h2>
+  <div class="message" id="msg"></div>
+  <div class="choices" id="choices" style="display:none;">
+    <button class="yes">Mau</button>
+    <button class="no">Enggak</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const start=document.getElementById("start");
+  const namaInput=document.getElementById("nama");
+  const mulaiBtn=document.getElementById("mulai");
+  const envelope=document.getElementById("envelope");
+  const card=document.getElementById("card");
+  const msg=document.getElementById("msg");
+  const choices=document.getElementById("choices");
+  const btnYes=document.querySelector(".yes");
+  const btnNo=document.querySelector(".no");
+
+  let nama="";
+  let opened=false,isTyping=false;
+
+  const textsBase=[
+    "Aku udah lama simpan perasaan ini...",
+    "Jujur aku bingung harus ngomong gimana.",
+    "Tapi aku gak mau nyesel karena gak pernah bilang.",
+  ];
+
+  function typeWriter(text){
+    return new Promise(resolve=>{
+      let j=0;
+      msg.innerHTML="";
+      isTyping=true;
+      function typing(){
+        if(j<text.length){
+          msg.innerHTML+=text[j++];
+          setTimeout(typing,40);
+        } else {
+          isTyping=false;
+          resolve();
+        }
+      }
+      typing();
+    });
+  }
+
+  async function showMessages(){
+    for(let t of textsBase){
+      await typeWriter(t);
+      await new Promise(r=>setTimeout(r,900));
+    }
+    await typeWriter(`${nama}, kamu mau gak jadi pacarku? ❤️`);
+    choices.style.display="flex";
+  }
+
+  mulaiBtn.addEventListener("click",()=>{
+    if(!namaInput.value.trim()) {
+      alert("Masukin namanya dulu ya 😅");
+      return;
+    }
+    nama=namaInput.value.trim();
+    start.style.display="none";
+    envelope.style.display="flex";
+  });
+
+  envelope.addEventListener("click",()=>{
+    if(opened||isTyping) return;
+    opened=true;
+    envelope.classList.add("opened");
+    setTimeout(()=>{
+      envelope.style.display="none";
+      card.style.display="flex";
+      showMessages();
+    },600);
+  });
+
+  function sendToWA(pesan,btn){
+    btn.disabled=true;
+    let nomor=""; // ganti nomor WA kamu
+    window.open(`https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`,"_blank");
+    setTimeout(()=>btn.disabled=false,3000);
+  }
+
+  btnYes.addEventListener("click",()=>sendToWA(`Aku mau jadi pacarkamu`,btnYes));
+  btnNo.addEventListener("click",()=>sendToWA(`Maaf aku gak mau jadi pacarkamu`,btnNo));
+})();
+</script>
+</body>
+</html>
